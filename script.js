@@ -54,5 +54,11 @@ document.addEventListener('keydown', (event) => {
     buttons.map((element) => element.textContent = subtractMode ? '-' : '+');
 });
 
+document.querySelector('.total').addEventListener('click', (_) => {
+    const dataToCopy = `Out: ${categories.outbound}--In: ${categories.inbound}--Skip: ${categories.skip}\nTotal: ${categories.total}`;
+    navigator.clipboard.writeText(dataToCopy);
+    console.log(`Total copied to clipboard.`);
+});
+
 updateTotal();
 updatePageCounts();
