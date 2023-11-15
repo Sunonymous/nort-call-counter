@@ -1,5 +1,7 @@
 'use strict';
 
+const DAILY_GOAL = 30;
+
 // mutable let
 let categories = {
     inbound:  0,
@@ -30,6 +32,10 @@ const updateTotal = () => categories.total = Object.keys(categories)
 const updatePageCounts = () => {
     const counters = [...document.querySelectorAll('[data-signal]')];
     counters.map(element => element.textContent = categories[element.dataset.signal]);
+    const totalCounter = document.querySelector('[data-signal="total"]');
+    const hasMetGoal = categories.total >= DAILY_GOAL;
+    hasMetGoal ? totalCounter.classList.add('magenta')
+               : totalCounter.classList.remove('magenta');
 };
 
 
