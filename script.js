@@ -23,9 +23,10 @@ const addToCategory = (aCollection, aNumber, aCategory) => {
 // const incCategory = addToCategory.bind(document, categories);
 
 const sum = (a, b) => a + b;
-const notTotal = category => category.toLowerCase() !== 'total';
+const validCallTypes = ['inbound', 'outbound'];
+const isValidCall = (aCallType) => validCallTypes.includes(aCallType);
 const updateTotal = () => categories.total = Object.keys(categories)
-                                                   .filter(notTotal)
+                                                   .filter(isValidCall)
                                                    .map(category => categories[category])
                                                    .reduce(sum);
 
@@ -55,7 +56,7 @@ document.addEventListener('keydown', (event) => {
 });
 
 document.querySelector('.total').addEventListener('click', (_) => {
-    const dataToCopy = `Out: ${categories.outbound}--In: ${categories.inbound}--Skip: ${categories.skip}\nTotal: ${categories.total}`;
+    const dataToCopy = `Outbound: ${categories.outbound}—Inbound: ${categories.inbound}—Skip: ${categories.skip}\nTotal: ${categories.total}`;
     navigator.clipboard.writeText(dataToCopy);
     console.log(`Total copied to clipboard.`);
 });
