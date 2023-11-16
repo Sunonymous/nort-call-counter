@@ -2,6 +2,10 @@
 
 const DAILY_GOAL = 30;
 
+const settings = {
+    measureGoal: true,
+};
+
 // mutable let
 let categories = {
     inbound:  0,
@@ -46,7 +50,7 @@ const updatePageCounts = () => {
         addToCategory(categories, numberToAdd, element.dataset.inc_category);
         updateTotal();
         updatePageCounts();
-    }
+    };
 });
 
 document.addEventListener('keydown', (event) => {
@@ -56,10 +60,17 @@ document.addEventListener('keydown', (event) => {
 });
 
 document.querySelector('.total').addEventListener('click', (_) => {
+    const onlyPositiveCounts = (category) => categories[category] && categories[category] > 0;
+    let results = Object.keys(categories)
+                          .filter(onlyPositiveCounts)
+                          .map(cat => `${cat}::${categories[cat]}`)
+                          .join('——');
+    if (settings['measureGoal']) results += `/${DAILY_GOAL}`;
     const dataToCopy = `Outbound: ${categories.outbound}—Inbound: ${categories.inbound}—Skip: ${categories.skip}\nTotal: ${categories.total}`;
-    navigator.clipboard.writeText(dataToCopy);
-    console.log(`Total copied to clipboard.`);
+    navigator.clipboard.writeText(results);
+    console.log(`Progress copied to clipboard.`);
 });
 
+// initialization
 updateTotal();
 updatePageCounts();
