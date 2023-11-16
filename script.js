@@ -1,9 +1,14 @@
 'use strict';
 
+// useful?
+const qSelectAll = ((query) => [...document.querySelectorAll(query)]).bind(document);
+
 const DAILY_GOAL = 30;
 
 const settings = {
     measureGoal: true,
+    categorySeparator: '——',
+    delimiter: '::',
 };
 
 // mutable let
@@ -44,7 +49,7 @@ const updatePageCounts = () => {
 };
 
 
-[...document.querySelectorAll('[data-inc_category]')].map((element) => {
+qSelectAll('[data-inc_category]').map((element) => {
     element.onclick = (event) => {
         const numberToAdd = subtractMode ? -1 : 1;
         addToCategory(categories, numberToAdd, element.dataset.inc_category);
@@ -63,14 +68,18 @@ document.querySelector('.total').addEventListener('click', (_) => {
     const onlyPositiveCounts = (category) => categories[category] && categories[category] > 0;
     let results = Object.keys(categories)
                           .filter(onlyPositiveCounts)
-                          .map(cat => `${cat}::${categories[cat]}`)
-                          .join('——');
+                          .map(cat => `${cat}${settings.delimiter}${categories[cat]}`)
+                          .join(settings.categorySeparator);
     if (settings['measureGoal']) results += `/${DAILY_GOAL}`;
-    const dataToCopy = `Outbound: ${categories.outbound}—Inbound: ${categories.inbound}—Skip: ${categories.skip}\nTotal: ${categories.total}`;
     navigator.clipboard.writeText(results);
     console.log(`Progress copied to clipboard.`);
 });
 
 // initialization
+
+document.querySelector('#goal').textContent = DAILY_GOAL;
+if (!settings.measureGoal) {
+    qSelectAll('.goal').map(element => element.hidden = true);
+}
 updateTotal();
 updatePageCounts();

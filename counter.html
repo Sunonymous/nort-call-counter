@@ -50,8 +50,12 @@
         margin-left: auto;
         padding-left: 8px;
         padding-right: 4px;
-        display: block;
+        display: flex;
         border-radius: 12px;
+    }
+
+    #goal {
+        margin-left: 8px;
     }
 
     .total:hover {
@@ -88,6 +92,8 @@
         </div>
         <div class="total">
             <h2>Total:<span class="count" data-signal="total">0</span></h2>
+            <h2 class="goal">/</h2>
+            <h2 id="goal" class="goal"></h2>
         </div>
     </div>
     <script src="./script.js" />
